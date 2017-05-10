@@ -55,7 +55,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 #include <memory>
 #include <functional>
-
+#include <map>
 
 namespace Assimp {
 namespace FBX {
@@ -76,12 +76,6 @@ LazyObject::LazyObject(uint64_t id, const Element& element, const Document& doc)
 LazyObject::~LazyObject()
 {
 
-}
-
-// ------------------------------------------------------------------------------------------------
-static void dumpObjectClassInfo( const char* obtype, const std::string &classtag ) {
-    DefaultLogger::get()->debug( "obtype: " + std::string(obtype ));
-    DefaultLogger::get()->debug( "Classtag: " + classtag );
 }
 
 // ------------------------------------------------------------------------------------------------

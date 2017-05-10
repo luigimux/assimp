@@ -45,8 +45,8 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #include "ObjTools.h"
 #include "ObjFileData.h"
 #include "ParsingUtils.h"
-#include "DefaultIOSystem.h"
 #include "BaseImporter.h"
+#include <assimp/DefaultIOSystem.h>
 #include <assimp/DefaultLogger.hpp>
 #include <assimp/material.h>
 #include <assimp/Importer.hpp>
@@ -58,7 +58,7 @@ const std::string ObjFileParser::DEFAULT_MATERIAL = AI_DEFAULT_MATERIAL_NAME;
 
 // -------------------------------------------------------------------
 //  Constructor with loaded data and directories.
-ObjFileParser::ObjFileParser( IOStreamBuffer<char> &streamBuffer, const std::string &modelName, 
+ObjFileParser::ObjFileParser( IOStreamBuffer<char> &streamBuffer, const std::string &modelName,
                               IOSystem *io, ProgressHandler* progress,
                               const std::string &originalObjFileName) :
     m_DataIt(),
@@ -115,7 +115,7 @@ void ObjFileParser::parseFile( IOStreamBuffer<char> &streamBuffer ) {
         m_DataIt = buffer.begin();
         m_DataItEnd = buffer.end();
 
-        // Handle progress reporting        
+        // Handle progress reporting
         const size_t filePos( streamBuffer.getFilePos() );
         if ( lastFilePos < filePos ) {
             processed += static_cast<unsigned int>(filePos);
@@ -568,7 +568,10 @@ void ObjFileParser::getMaterialLib() {
     std::string absName;
 
 	// Check if directive is valid.
-	if(!strMatName.length()) throw DeadlyImportError("File name of the material is absent.");
+    if ( 0 == strMatName.length() ) {
+        DefaultLogger::get()->warn( "OBJ: no name for material library specified." );
+        return;
+    }
 
     if ( m_pIO->StackSize() > 0 ) {
         std::string path = m_pIO->CurrentDirectory();
